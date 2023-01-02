@@ -12,7 +12,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class GUIRunner extends Application {
 
     Stage window;
     Scene mainScene;
@@ -21,7 +21,7 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        fxml = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+        fxml = new FXMLLoader(getClass().getResource("GUISkeleton.fxml"));
         window = fxml.load();
 
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();

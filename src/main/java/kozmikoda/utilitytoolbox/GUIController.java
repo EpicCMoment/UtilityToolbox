@@ -13,7 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class HelloController {
+public class GUIController {
 
     double offsetX, offsetY;
     private Stage stage;
