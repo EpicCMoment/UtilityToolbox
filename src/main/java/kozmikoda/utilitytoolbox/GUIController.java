@@ -23,7 +23,7 @@ public class GUIController {
     @FXML
     private Pane toolboxInfoPane, passwordSpaceInfoPane, soundAnalyzerInfoPane;
     @FXML
-    private JFXButton passwordSpaceStartButtonLogo;
+    private JFXButton passwordSpaceStartButtonLogo, soundAnalyzerStartButtonLogo;
     @FXML
     private Label passwdIsAliveLabel, soundIsAliveLabel;
 
@@ -87,7 +87,7 @@ public class GUIController {
 
         try {
             // Creating the process for running the bat file
-            passwordSpaceProcess = Runtime.getRuntime().exec(new String[]{"C:/PROGRA~2/image/bin/PasswordSpace.bat"}, new String[]{"cmd"});
+            passwordSpaceProcess = Runtime.getRuntime().exec(new String[]{"C:/PROGRA~2/UtilityToolbox/PasswordSpace/bin/PasswordSpace.bat"}, new String[]{"cmd"});
             //minimize the app
             //window.setIconified(true);
 
@@ -116,8 +116,40 @@ public class GUIController {
         }
     }
 
+    static Process soundAnalyzerProcess;
+    static boolean soundAnalyzerFlag = true;
     @FXML
     void soundAnalyzerStartButton() {
+        soundAnalyzerStartButtonLogo.setDisable(true);
 
+        try {
+            // Creating the process for running the bat file
+            soundAnalyzerProcess = Runtime.getRuntime().exec(new String[]{"C:/PROGRA~2/UtilityToolbox/SoundAnalyzer/bin/SoundAnalyzer.bat"}, new String[]{"cmd"});
+            //minimize the app
+            //window.setIconified(true);
+
+            // Check whether the program is already running or not
+            // Flag is responsible for playing timeline just once
+            if (soundAnalyzerFlag) {
+                Timeline soundAnalyzerProcessHandler = new Timeline(
+                        new KeyFrame(Duration.seconds(1),
+                                new EventHandler<ActionEvent>() {
+                                    @Override
+                                    public void handle(ActionEvent event) {
+                                        soundAnalyzerStartButtonLogo.setDisable(soundAnalyzerProcess.isAlive());
+                                        soundIsAliveLabel.setVisible(soundAnalyzerProcess.isAlive());
+
+
+                                    }
+                                }));
+
+                soundAnalyzerProcessHandler.setCycleCount(Timeline.INDEFINITE);
+                soundAnalyzerProcessHandler.play();
+                soundAnalyzerFlag = false;
+            }
+
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }

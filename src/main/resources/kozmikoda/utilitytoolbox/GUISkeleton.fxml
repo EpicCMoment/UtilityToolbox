@@ -100,7 +100,7 @@
                            <Image url="@soundAnalyzerText.png" />
                         </image>
                      </ImageView>
-                     <JFXButton layoutX="175.0" layoutY="218.0" onAction="#soundAnalyzerStartButton" prefHeight="107.0" prefWidth="154.0" ripplerFill="#616aa4" styleClass="soundAnalyzerStarterButton" stylesheets="@mainStyle.css" textFill="WHITE">
+                     <JFXButton fx:id="soundAnalyzerStartButtonLogo" layoutX="175.0" layoutY="218.0" onAction="#soundAnalyzerStartButton" prefHeight="107.0" prefWidth="154.0" ripplerFill="#616aa4" styleClass="soundAnalyzerStarterButton" stylesheets="@mainStyle.css" textFill="WHITE">
                         <font>
                            <Font size="1.0" />
                         </font>
