@@ -36,3 +36,13 @@
 .addAppButton {
     -fx-graphic: url(addApp.png);
 }
+
+.buttonJFX
+{
+    -fx-background-color: linear-gradient(to bottom left, #70094f,  #b81484);
+}
+
+.text-input
+{
+    -fx-text-fill : #fff;
+}

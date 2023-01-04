@@ -6,12 +6,21 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class GUIController {
 
@@ -21,11 +30,28 @@ public class GUIController {
     @FXML
     private Stage window;
     @FXML
-    private Pane toolboxInfoPane, passwordSpaceInfoPane, soundAnalyzerInfoPane;
+    private Pane toolboxInfoPane, passwordSpaceInfoPane, soundAnalyzerInfoPane, soundAnalyzerPane;
     @FXML
-    private JFXButton passwordSpaceStartButtonLogo, soundAnalyzerStartButtonLogo;
+    private JFXButton passwordSpaceStartButtonLogo, soundAnalyzerStartButtonLogo, soundAnalyzerBackButton;
     @FXML
     private Label passwdIsAliveLabel, soundIsAliveLabel;
+
+    @FXML
+    private ProgressIndicator analyzeBar;
+    @FXML
+    private Label analyzeLabel;
+    @FXML
+    private TextField output;
+    @FXML
+    private JFXButton selectFileButton;
+    @FXML
+    private Scene mainLayout;
+    @FXML
+    private Pane titlebar;
+
+    FileChooser fileChooser = new FileChooser();
+
+    Path newDir;
 
 
     // Drag window functions
@@ -87,7 +113,7 @@ public class GUIController {
 
         try {
             // Creating the process for running the bat file
-            passwordSpaceProcess = Runtime.getRuntime().exec(new String[]{"C:/PROGRA~2/UtilityToolbox/PasswordSpace/bin/PasswordSpace.bat"}, new String[]{"cmd"});
+            passwordSpaceProcess = Runtime.getRuntime().exec(new String[]{"C:/PROGRA~2/image1/bin/PasswordSpace.bat"}, new String[]{"cmd"});
             //minimize the app
             //window.setIconified(true);
 
@@ -116,40 +142,62 @@ public class GUIController {
         }
     }
 
-    static Process soundAnalyzerProcess;
-    static boolean soundAnalyzerFlag = true;
+
     @FXML
     void soundAnalyzerStartButton() {
-        soundAnalyzerStartButtonLogo.setDisable(true);
+        soundAnalyzerPane.setVisible(true);
+    }
 
+
+    @FXML
+    protected void selectFileButton(ActionEvent event) {
+        selectFileButton.setDisable(true);
+        output.setVisible(false);
+        output.setText(" ");
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+
+        // ADD INITIAL DIRECTORY TO EXAMPLE SOUND FILE DIRECTORY
+        newDir = Paths.get(System.getProperty("user.dir"));
+        fileChooser.setInitialDirectory(newDir.resolve("test_sounds").toFile());
         try {
-            // Creating the process for running the bat file
-            soundAnalyzerProcess = Runtime.getRuntime().exec(new String[]{"C:/PROGRA~2/UtilityToolbox/SoundAnalyzer/bin/SoundAnalyzer.bat"}, new String[]{"cmd"});
-            //minimize the app
-            //window.setIconified(true);
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Wav Files", "*.wav")
+            );
 
-            // Check whether the program is already running or not
-            // Flag is responsible for playing timeline just once
-            if (soundAnalyzerFlag) {
-                Timeline soundAnalyzerProcessHandler = new Timeline(
-                        new KeyFrame(Duration.seconds(1),
-                                new EventHandler<ActionEvent>() {
-                                    @Override
-                                    public void handle(ActionEvent event) {
-                                        soundAnalyzerStartButtonLogo.setDisable(soundAnalyzerProcess.isAlive());
-                                        soundIsAliveLabel.setVisible(soundAnalyzerProcess.isAlive());
+            // save the file that is chose by the user
+            File sound = fileChooser.showOpenDialog(stage);
+            // Creating the sound analyzer object
+            SoundAnalyzerStart analyzerObj = new SoundAnalyzerStart(sound, output, selectFileButton, analyzeBar, analyzeLabel, soundAnalyzerBackButton);
 
+            // Calling the preprocessing function
+            analyzerObj.prepareFile();
+            // Starting the thread
+            analyzerObj.start();
 
-                                    }
-                                }));
+            analyzeBar.setVisible(true);
+            analyzeLabel.setVisible(true);
 
-                soundAnalyzerProcessHandler.setCycleCount(Timeline.INDEFINITE);
-                soundAnalyzerProcessHandler.play();
-                soundAnalyzerFlag = false;
-            }
+            // Changing the visibilities of progress bar and analyzing label
+            //analyzeBar.setVisible(true);
+            //analyzeLabel.setVisible(true);
 
-        }catch(Exception e) {
+        } catch (NullPointerException e) {
+            output.setVisible(true);
+            output.setText("You did not select a file!");
+            selectFileButton.setDisable(false);
             e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+        // output.setText(data);
+
+    }
+
+    @FXML
+    void soundAnalyzerBackButtonAction() {
+        soundAnalyzerPane.setVisible(false);
+        output.setText(" ");
+        output.setVisible(false);
     }
 }
