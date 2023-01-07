@@ -40,6 +40,10 @@ public class SoundAnalyzerStart extends Thread {
     }
 
     PrintStream ps = null;
+
+    /**
+     * Runs the sound processing on the selected file
+     */
     public void run() {
         soundAnalyzerBackButton.setDisable(true);
         File exePath = new File(newDir.resolve("resources").toString());
@@ -97,6 +101,9 @@ public class SoundAnalyzerStart extends Thread {
 
     }
 
+    /**
+     * Copies file into needed locations and prepares it for processing
+     */
     public void prepareFile() {
         // PREPROCESS
         // copying selected .wav file

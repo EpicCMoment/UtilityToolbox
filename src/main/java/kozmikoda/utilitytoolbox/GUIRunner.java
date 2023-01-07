@@ -19,6 +19,14 @@ public class GUIRunner extends Application {
 
     FXMLLoader fxml;
 
+    /**
+     * Starts the main application window
+     * @param stage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     * @throws IOException
+     */
     @Override
     public void start(Stage stage) throws IOException {
         fxml = new FXMLLoader(getClass().getResource("GUISkeleton.fxml"));

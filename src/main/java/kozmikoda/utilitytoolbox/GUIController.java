@@ -22,9 +22,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * This class contains main controls of the UtilityToolbox application window
+ */
 public class GUIController {
 
-    double offsetX, offsetY;
+    private double offsetX, offsetY;
     private Stage stage;
 
     @FXML
@@ -49,25 +52,32 @@ public class GUIController {
     @FXML
     private Pane titlebar;
 
-    FileChooser fileChooser = new FileChooser();
+    private FileChooser fileChooser = new FileChooser();
 
-    Path newDir;
+    private Path newDir;
 
 
-    // Drag window functions
+    /**
+     * Lets you drag window around
+     */
     @FXML
     void dragWindow(MouseEvent event) {
         window.setX(event.getScreenX() - offsetX);
         window.setY(event.getScreenY() - offsetY);
     }
 
+    /**
+     * Prepare the window for dragging
+     */
     @FXML
     void setWindowOffset(MouseEvent event) {
         offsetX = event.getSceneX();
         offsetY = event.getSceneY();
     }
 
-    // close button
+    /**
+     * Action of the close button
+     */
     @FXML
     void closeButton(ActionEvent event) {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -75,13 +85,17 @@ public class GUIController {
 
     }
 
-    // minimize button
+    /**
+     * Action of the minimize button
+     */
     @FXML
     void minimizeButton() {
         window.setIconified(true);
     }
 
-    // chooser buttons
+    /**
+     * Return to the main site of the application
+     */
     @FXML
     void toolboxChooseButton() {
         toolboxInfoPane.setVisible(true);
@@ -89,6 +103,9 @@ public class GUIController {
         soundAnalyzerInfoPane.setVisible(false);
     }
 
+    /**
+     * Bring Password Space site to the front
+     */
     @FXML
     void passwordSpaceChooseButton() {
         toolboxInfoPane.setVisible(false);
@@ -96,6 +113,9 @@ public class GUIController {
         passwordSpaceInfoPane.setVisible(true);
     }
 
+    /**
+     * Bring Sound Analyzer site to the front
+     */
     @FXML
     void soundAnalyzerChooseButton () {
         toolboxInfoPane.setVisible(false);
@@ -104,9 +124,12 @@ public class GUIController {
 
     }
 
-    // Application Start Buttons
     static Process passwordSpaceProcess;
     static boolean passwordSpaceFlag = true;
+
+    /**
+     * Action of the Password Space icon button
+     */
     @FXML
     void passwordSpaceStartButton() {
         passwordSpaceStartButtonLogo.setDisable(true);
@@ -143,12 +166,18 @@ public class GUIController {
     }
 
 
+    /**
+     * Action of the Sound Analyzer icon button
+     */
     @FXML
     void soundAnalyzerStartButton() {
         soundAnalyzerPane.setVisible(true);
     }
 
 
+    /**
+     * Opens up a file selector window
+     */
     @FXML
     protected void selectFileButton(ActionEvent event) {
         selectFileButton.setDisable(true);
@@ -194,6 +223,9 @@ public class GUIController {
 
     }
 
+    /**
+     * Send back the Sound Analyzer site and show the main site
+     */
     @FXML
     void soundAnalyzerBackButtonAction() {
         soundAnalyzerPane.setVisible(false);
